@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Url
 
 data class Message(val role: String, val content: String)
 data class GroqRequest(
@@ -19,16 +20,14 @@ interface GroqApi {
         "Authorization: Bearer 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",
         "Content-Type: application/json"
     )
-    @POST("v1/chat/completions")
-    suspend fun getChatCompletion(@Body request: GroqRequest): GroqResponse
+    @POST
+    suspend fun getChatCompletion(@Url url: String = "https://api.groq.com/openai/v1/chat/completions", @Body request: GroqRequest): GroqResponse
 }
 
 object RetrofitClient {
-    private const val BASE_URL = "https://api.groq.com/openai/"
-
     val instance: GroqApi by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://api.groq.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GroqApi::class.java)
