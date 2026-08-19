@@ -19,12 +19,12 @@ interface GroqApi {
         "Authorization: Bearer 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",
         "Content-Type: application/json"
     )
-    @POST("v1/chat/completions")
+    @POST("chat/completions")
     suspend fun getChatCompletion(@Body request: GroqRequest): GroqResponse
 }
 
 object RetrofitClient {
-    private const val BASE_URL = "https://api.groq.com/openai/"
+    private const val BASE_URL = "https://api.groq.com/openai/v1/"
 
     val instance: GroqApi by lazy {
         Retrofit.Builder()
