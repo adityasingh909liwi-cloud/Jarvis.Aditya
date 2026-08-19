@@ -19,7 +19,7 @@ interface GroqApi {
         "Authorization: Bearer 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",
         "Content-Type: application/json"
     )
-    @POST("https://api.groq.com/openai/v1/chat/completions")
+    @POST("openai/v1/chat/completions")
     suspend fun getChatCompletion(@Body request: GroqRequest): GroqResponse
 }
 
