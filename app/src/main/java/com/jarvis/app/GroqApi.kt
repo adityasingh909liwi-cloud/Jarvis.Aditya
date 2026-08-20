@@ -6,14 +6,13 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-// डेटा मॉडल
 data class Message(
     val role: String,
     val content: String
 )
 
 data class GroqRequest(
-    val model: String = "llama3-8b-8192",
+    val model: String = "llama-3.1-8b-instant",
     val messages: List<Message>
 )
 
@@ -25,17 +24,15 @@ data class GroqResponse(
     val choices: List<Choice>
 )
 
-// Retrofit API इंटरफेस
 interface GroqApiService {
     @Headers(
-        "Authorization: Bearer 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",
+        "Authorization: Bearer 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",
         "Content-Type: application/json"
     )
     @POST("v1/chat/completions")
     suspend fun getChatCompletion(@Body request: GroqRequest): GroqResponse
 }
 
-// Retrofit singleton क्लाइंट
 object RetrofitClient {
     private const val BASE_URL = "https://api.groq.com/openai/"
 
