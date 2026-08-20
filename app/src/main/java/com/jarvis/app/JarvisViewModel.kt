@@ -12,15 +12,15 @@ class JarvisViewModel : ViewModel() {
     fun sendMessage(userText: String) {
         if (userText.isBlank()) return
 
-        // 1. यूजर का मैसेज जोड़ें
         messages.add(ChatMessage(content = userText, isUser = true))
 
-        // 2. Groq API कॉल करें
         viewModelScope.launch {
             try {
                 val apiMessages = messages.map { Message(role = if (it.isUser) "user" else "assistant", content = it.content) }
                 val request = GroqRequest(messages = apiMessages)
-                val response = RetrofitClient.instance.getChatCompletion(request)
+                val authHeader = "Bearer " + BuildConfig.GROQ_API_KEY
+                
+                val response = RetrofitClient.instance.getChatCompletion(authHeader, request)
                 
                 val botReply = response.choices.firstOrNull()?.message?.content ?: "No response from JARVIS."
                 messages.add(ChatMessage(content = botReply, isUser = false))
