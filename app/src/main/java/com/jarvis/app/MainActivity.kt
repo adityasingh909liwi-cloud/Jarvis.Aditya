@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
     private val viewModel: JarvisViewModel by viewModels()
@@ -28,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ChatScreen(viewModel = viewModel)
+                    ChatScreen(viewModel)
                 }
             }
         }
@@ -37,34 +36,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ChatScreen(viewModel: JarvisViewModel) {
-    val messages by viewModel.messages.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
-    var inputText by remember { mutableStateOf("") }
+    var textState by remember { mutableStateOf("") }
+    val messages = viewModel.messages
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // चैट मैसेज लिस्ट
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             reverseLayout = false
         ) {
-            items(messages) { msg ->
-                ChatBubble(message = msg)
+            items(messages) { message ->
+                ChatBubble(message)
             }
         }
 
-        if (uiState is ChatUiState.Loading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(8.dp)
-            )
-        }
-
-        // टेक्स्ट इनपुट और सेंड बटन
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,17 +62,17 @@ fun ChatScreen(viewModel: JarvisViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
-                value = inputText,
-                onValueChange = { inputText = it },
+                value = textState,
+                onValueChange = { textState = it },
                 modifier = Modifier.weight(1f),
                 placeholder = { Text("Talk to JARVIS...") }
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 onClick = {
-                    if (inputText.isNotBlank()) {
-                        viewModel.sendMessage(inputText)
-                        inputText = ""
+                    if (textState.isNotBlank()) {
+                        viewModel.sendMessage(textState)
+                        textState = ""
                     }
                 }
             ) {
@@ -94,23 +84,21 @@ fun ChatScreen(viewModel: JarvisViewModel) {
 
 @Composable
 fun ChatBubble(message: ChatMessage) {
-    val isUser = message.isUser
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        contentAlignment = if (isUser) Alignment.CenterEnd else Alignment.CenterStart
+        contentAlignment = if (message.isUser) Alignment.CenterEnd else Alignment.CenterStart
     ) {
-        Surface(
-            color = if (isUser) Color(0xFF007AFF) else Color(0xFFE5E5EA),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text(
-                text = message.content,
-                color = if (isUser) Color.White else Color.Black,
-                modifier = Modifier.padding(12.dp),
-                fontSize = 16.sp
-            )
-        }
+        Text(
+            text = message.content,
+            color = Color.White,
+            modifier = Modifier
+                .background(
+                    color = if (message.isUser) Color(0xFF007AFF) else Color(0xFF4A4A4A),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(12.dp)
+        )
     }
 }
