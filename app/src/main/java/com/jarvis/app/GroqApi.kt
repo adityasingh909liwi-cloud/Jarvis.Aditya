@@ -3,7 +3,7 @@ package com.jarvis.app
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Headers
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 data class Message(
@@ -25,12 +25,11 @@ data class GroqResponse(
 )
 
 interface GroqApiService {
-    @Headers(
-        "Authorization: Bearer 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",
-        "Content-Type: application/json"
-    )
     @POST("v1/chat/completions")
-    suspend fun getChatCompletion(@Body request: GroqRequest): GroqResponse
+    suspend fun getChatCompletion(
+        @Header("Authorization") authHeader: String,
+        @Body request: GroqRequest
+    ): GroqResponse
 }
 
 object RetrofitClient {
