@@ -22,6 +22,10 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
+    # यह स्टेप परमिशन की समस्या दूर करेगा
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+
     - name: Build with Gradle
       env:
         GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -32,3 +36,4 @@ jobs:
       with:
         name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
+        
