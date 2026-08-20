@@ -18,6 +18,9 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        // buildConfigField को defaultConfig में रखें
+        buildConfigField "String", "GROQ_API_KEY", "\"${System.getenv("GROQ_API_KEY") ?: ""}\""
     }
 
     buildFeatures {
@@ -29,10 +32,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "GROQ_API_KEY", "\"${System.getenv("GROQ_API_KEY") ?: ""}\""
         }
         debug {
-            buildConfigField "String", "GROQ_API_KEY", "\"${System.getenv("GROQ_API_KEY") ?: ""}\""
+            // debug specific settings
         }
     }
 
