@@ -1,10 +1,6 @@
-dependencies {
-    // Add Koin for Dependency Injection
-    implementation("io.insert-koin:koin-android:3.5.6")
-    implementation("io.insert-koin:koin-core:3.5.6")
 
-    // Add this if your models (Message, GroupService, RetrofitClient) are in a separate module named ':data'
-    implementation(project(":data")) 
-    
-    // ... rest of your dependencies
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.jetbrains.kotlin.android) apply false
 }
