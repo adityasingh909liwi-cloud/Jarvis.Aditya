@@ -19,8 +19,8 @@ android {
             useSupportLibrary true
         }
 
-        // buildConfigField को defaultConfig में रखें
-        buildConfigField "String", "GROQ_API_KEY", "\"${System.getenv("GROQ_API_KEY") ?: ""}\""
+        // String formatting को इस तरह सुरक्षित करें
+        buildConfigField "String", "GROQ_API_KEY", "\"${(System.getenv("GROQ_API_KEY") ?: "").trim()}\""
     }
 
     buildFeatures {
